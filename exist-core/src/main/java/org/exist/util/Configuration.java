@@ -170,7 +170,7 @@ public class Configuration implements ErrorHandler
                 //}
 
                 if(!Files.exists(configFile) || !Files.isReadable(configFile)) {
-                    throw new DatabaseConfigurationException("Unable to read configuration file at " + configFile);
+                    throw new DatabaseConfigurationException("Unable to read configuration file at " + configFile.toAbsolutePath());
                 }
                 
                 configFilePath = Optional.of(configFile.toAbsolutePath());
