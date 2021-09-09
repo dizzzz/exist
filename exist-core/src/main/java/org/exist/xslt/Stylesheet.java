@@ -21,13 +21,14 @@
  */
 package org.exist.xslt;
 
-import java.io.IOException;
-import javax.xml.transform.Templates;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.sax.TransformerHandler;
 import org.exist.security.PermissionDeniedException;
 import org.exist.storage.DBBroker;
 import org.xml.sax.SAXException;
+
+import javax.xml.transform.Templates;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.sax.TransformerHandler;
+import java.io.IOException;
 
 /**
  * {@link javax.xml.transform.Templates} resolver and compiler interface.
@@ -36,9 +37,9 @@ import org.xml.sax.SAXException;
  */
 public interface Stylesheet {
 
-  <E extends Exception> Templates templates(DBBroker broker, XSLTErrorsListener<E> errorListener)
-      throws E, PermissionDeniedException, SAXException, TransformerConfigurationException, IOException;
+    <E extends Exception> Templates templates(DBBroker broker, XSLTErrorsListener<E> errorListener)
+            throws E, PermissionDeniedException, SAXException, TransformerConfigurationException, IOException;
 
-  <E extends Exception> TransformerHandler newTransformerHandler(DBBroker broker, XSLTErrorsListener<E> errorListener)
-      throws E, PermissionDeniedException, SAXException, TransformerConfigurationException, IOException;
+    <E extends Exception> TransformerHandler newTransformerHandler(DBBroker broker, XSLTErrorsListener<E> errorListener)
+            throws E, PermissionDeniedException, SAXException, TransformerConfigurationException, IOException;
 }

@@ -21,75 +21,76 @@
  */
 package org.exist.xslt;
 
-import javax.xml.transform.ErrorListener;
-import javax.xml.transform.TransformerException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.xml.transform.ErrorListener;
+import javax.xml.transform.TransformerException;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
 public abstract class XSLTErrorsListener<E extends Exception> implements ErrorListener {
 
-  private final static Logger LOG = LogManager.getLogger(XSLTErrorsListener.class);
+    private final static Logger LOG = LogManager.getLogger(XSLTErrorsListener.class);
 
-  private final static int NO_ERROR = 0;
-  private final static int WARNING = 1;
-  private final static int ERROR = 2;
-  private final static int FATAL = 3;
+    private final static int NO_ERROR = 0;
+    private final static int WARNING = 1;
+    private final static int ERROR = 2;
+    private final static int FATAL = 3;
 
-  final boolean stopOnError;
-  final boolean stopOnWarn;
+    final boolean stopOnError;
+    final boolean stopOnWarn;
 
-  private int errorCode = NO_ERROR;
-  private Exception exception;
+    private int errorCode = NO_ERROR;
+    private Exception exception;
 
-  public XSLTErrorsListener(boolean stopOnError, boolean stopOnWarn) {
-    this.stopOnError = stopOnError;
-    this.stopOnWarn = stopOnWarn;
-  }
+    public XSLTErrorsListener(boolean stopOnError, boolean stopOnWarn) {
+        this.stopOnError = stopOnError;
+        this.stopOnWarn = stopOnWarn;
+    }
 
-  protected abstract void raiseError(String error, Exception ex) throws E;
+    protected abstract void raiseError(String error, Exception ex) throws E;
 
-  public void checkForErrors() throws E {
-    switch (errorCode) {
-      case WARNING:
+    public void checkForErrors() throws E {
+        switch (errorCode) {
+            case WARNING:
+                if (stopOnWarn) {
+                    raiseError("XSL transform reported warning: " + exception.getMessage(), exception);
+                }
+                break;
+            case ERROR:
+                if (stopOnError) {
+                    raiseError("XSL transform reported error: " + exception.getMessage(), exception);
+                }
+                break;
+            case FATAL:
+                raiseError("XSL transform reported error: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void warning(TransformerException except) throws TransformerException {
+        LOG.warn("XSL transform reports warning: {}", except.getMessage(), except);
+        errorCode = WARNING;
+        exception = except;
         if (stopOnWarn) {
-          raiseError("XSL transform reported warning: " + exception.getMessage(), exception);
+            throw except;
         }
-        break;
-      case ERROR:
+    }
+
+    public void error(TransformerException except) throws TransformerException {
+        LOG.warn("XSL transform reports recoverable error: {}", except.getMessage(), except);
+        errorCode = ERROR;
+        exception = except;
         if (stopOnError) {
-          raiseError("XSL transform reported error: " + exception.getMessage(), exception);
+            throw except;
         }
-        break;
-      case FATAL:
-        raiseError("XSL transform reported error: " + exception.getMessage(), exception);
     }
-  }
 
-  public void warning(TransformerException except) throws TransformerException {
-      LOG.warn("XSL transform reports warning: {}", except.getMessage(), except);
-    errorCode = WARNING;
-    exception = except;
-    if (stopOnWarn) {
-      throw except;
+    public void fatalError(TransformerException except) throws TransformerException {
+        LOG.warn("XSL transform reports fatal error: {}", except.getMessage(), except);
+        errorCode = FATAL;
+        exception = except;
+        throw except;
     }
-  }
-
-  public void error(TransformerException except) throws TransformerException {
-      LOG.warn("XSL transform reports recoverable error: {}", except.getMessage(), except);
-    errorCode = ERROR;
-    exception = except;
-    if (stopOnError) {
-      throw except;
-    }
-  }
-
-  public void fatalError(TransformerException except) throws TransformerException {
-      LOG.warn("XSL transform reports fatal error: {}", except.getMessage(), except);
-    errorCode = FATAL;
-    exception = except;
-    throw except;
-  }
 }

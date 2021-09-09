@@ -21,12 +21,12 @@
  */
 package org.exist.xslt;
 
-import java.io.InputStream;
-import java.io.Reader;
-
 import org.exist.dom.persistent.DocumentImpl;
 import org.exist.storage.DBBroker;
 import org.xml.sax.InputSource;
+
+import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * {@link org.xml.sax.InputSource} identifying a document within the eXist database.
@@ -37,22 +37,22 @@ import org.xml.sax.InputSource;
 public class EXistDbInputSource extends InputSource {
     private final DBBroker broker;
     private final DocumentImpl doc;
-    
+
     public EXistDbInputSource(DBBroker broker, DocumentImpl doc) {
         super();
-        
+
         this.broker = broker;
         this.doc = doc;
     }
-    
+
     public DBBroker getBroker() {
         return this.broker;
     }
-    
+
     public DocumentImpl getDocument() {
         return this.doc;
     }
-    
+
     @Override
     public void setByteStream(InputStream stream) {
         throw new UnsupportedOperationException();
@@ -61,5 +61,5 @@ public class EXistDbInputSource extends InputSource {
     @Override
     public void setCharacterStream(Reader stream) {
         throw new UnsupportedOperationException();
-    }    
+    }
 }

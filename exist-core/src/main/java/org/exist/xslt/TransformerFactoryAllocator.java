@@ -21,20 +21,18 @@
  */
 package org.exist.xslt;
 
-import java.util.Hashtable;
-import java.util.Iterator;
-
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXTransformerFactory;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.exist.storage.BrokerPool;
 
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import java.util.Hashtable;
+
 /**
  * Allows the TransformerFactory that is used for XSLT to be
  * chosen through configuration settings in conf.xml
- *
+ * <p>
  * Within eXist this class should be used instead of
  * directly calling SAXTransformerFactory.newInstance() directly
  *
@@ -43,19 +41,15 @@ import org.exist.storage.BrokerPool;
  */
 
 public class TransformerFactoryAllocator {
-    private final static Logger LOG = LogManager.getLogger(TransformerFactoryAllocator.class);
-
     public static final String CONFIGURATION_ELEMENT_NAME = "transformer";
     public final static String TRANSFORMER_CLASS_ATTRIBUTE = "class";
     public final static String PROPERTY_TRANSFORMER_CLASS = "transformer.class";
-
     public final static String CONFIGURATION_TRANSFORMER_ATTRIBUTE_ELEMENT_NAME = "attribute";
     public final static String PROPERTY_TRANSFORMER_ATTRIBUTES = "transformer.attributes";
-
     public final static String TRANSFORMER_CACHING_ATTRIBUTE = "caching";
     public final static String PROPERTY_CACHING_ATTRIBUTE = "transformer.caching";
-
     public final static String PROPERTY_BROKER_POOL = "transformer.brokerPool";
+    private final static Logger LOG = LogManager.getLogger(TransformerFactoryAllocator.class);
 
     //private constructor
     private TransformerFactoryAllocator() {
@@ -68,9 +62,9 @@ public class TransformerFactoryAllocator {
      *
      * @param pool A database broker pool, used for reading the conf.xml configuration
      * @return A SAXTransformerFactory, for which newInstance() can then be called
-     *
+     * <p>
      * Typical usage:
-     *
+     * <p>
      * Instead of SAXTransformerFactory.newInstance() use
      * TransformerFactoryAllocator.getTransformerFactory(broker).newInstance()
      */

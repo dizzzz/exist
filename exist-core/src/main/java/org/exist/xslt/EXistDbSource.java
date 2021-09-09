@@ -21,14 +21,14 @@
  */
 package org.exist.xslt;
 
-import javax.xml.transform.sax.SAXSource;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.exist.dom.persistent.DocumentImpl;
 import org.exist.storage.DBBroker;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import javax.xml.transform.sax.SAXSource;
 
 /**
  * {@link javax.xml.transform.sax.SAXSource} Supplying an XML document from the eXist database.
@@ -41,49 +41,49 @@ public class EXistDbSource extends SAXSource {
     private final static Logger LOG = LogManager.getLogger(EXistDbSource.class);
 
     private InputSource source;
-    
+
     public EXistDbSource(final DBBroker broker, final DocumentImpl doc) {
         this.source = new EXistDbInputSource(broker, doc);
     }
 
     @Override
-    public InputSource getInputSource() { 
+    public InputSource getInputSource() {
         return this.source;
     }
-    
-    @Override
-    public String getSystemId() {
-        return (this.source == null) ? null : this.source.getSystemId();
-    }
-    
-    @Override
-    public XMLReader getXMLReader() {
-	/* FIXME:  Should the reader be configured to read our InputSource before returning?
-         * Apparently Saxon configures it later with our InputSource, leaving this an open question.
-	 */
-        return new EXistDbXMLReader();
-    }
-    
+
     @Override
     public void setInputSource(final InputSource inputSource) {
         if (!(inputSource instanceof EXistDbInputSource)) {
             throw new UnsupportedOperationException("EXistDbSource only accepts EXistDbInputSource");
         }
-        
+
         this.source = inputSource;
     }
-    
+
+    @Override
+    public String getSystemId() {
+        return (this.source == null) ? null : this.source.getSystemId();
+    }
+
     @Override
     public void setSystemId(final String systemId) {
-	if (this.source == null) {
-	    // This should not be possible
-	    throw new IllegalStateException("EXistDbSource cannot initialize InputSource from a systemId");
-	}
+        if (this.source == null) {
+            // This should not be possible
+            throw new IllegalStateException("EXistDbSource cannot initialize InputSource from a systemId");
+        }
         this.source.setSystemId(systemId);
     }
-    
+
+    @Override
+    public XMLReader getXMLReader() {
+        /* FIXME:  Should the reader be configured to read our InputSource before returning?
+         * Apparently Saxon configures it later with our InputSource, leaving this an open question.
+         */
+        return new EXistDbXMLReader();
+    }
+
     @Override
     public void setXMLReader(final XMLReader reader) {
-	throw new UnsupportedOperationException("Setting external reader is not supported");
+        throw new UnsupportedOperationException("Setting external reader is not supported");
     }
 }

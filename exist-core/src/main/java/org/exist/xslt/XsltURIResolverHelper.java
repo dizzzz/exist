@@ -41,15 +41,15 @@ public class XsltURIResolverHelper {
     /**
      * Get a URI Resolver for XSLT Modules.
      *
-     * @param brokerPool the database
+     * @param brokerPool      the database
      * @param defaultResolver the default fallback resolver, or null
-     * @param base the URI base, or null
-     * @param avoidSelf true to avoid nesting {@link URIResolverHierarchy}
-     *
+     * @param base            the URI base, or null
+     * @param avoidSelf       true to avoid nesting {@link URIResolverHierarchy}
      * @return the URIResolver, or null if there is no resolver
      */
-    public static @Nullable URIResolver getXsltURIResolver(final BrokerPool brokerPool,
-            @Nullable final URIResolver defaultResolver, @Nullable final String base, final boolean avoidSelf) {
+    public static @Nullable
+    URIResolver getXsltURIResolver(final BrokerPool brokerPool,
+                                   @Nullable final URIResolver defaultResolver, @Nullable final String base, final boolean avoidSelf) {
         final List<URIResolver> resolvers = new ArrayList<>();
 
         if (base != null) {
