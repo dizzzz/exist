@@ -38,8 +38,8 @@ public abstract class XSLTErrorsListener<E extends Exception> implements ErrorLi
   private final static int ERROR = 2;
   private final static int FATAL = 3;
 
-  boolean stopOnError;
-  boolean stopOnWarn;
+  final boolean stopOnError;
+  final boolean stopOnWarn;
 
   private int errorCode = NO_ERROR;
   private Exception exception;

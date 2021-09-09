@@ -44,7 +44,6 @@ import org.exist.storage.BrokerPool;
 import org.exist.storage.DBBroker;
 import org.exist.storage.lock.Lock.LockMode;
 import org.exist.storage.serializers.Serializer;
-import org.exist.util.EXistURISchemeURIResolver;
 import org.exist.xmldb.XmldbURI;
 import org.exist.xquery.Constants;
 import org.xml.sax.SAXException;
@@ -66,8 +65,8 @@ public class StylesheetResolverAndCompiler implements Stylesheet {
   long lastModified = -1;
   Templates templates = null;
 
-  String uri;
-  String base;
+  final String uri;
+  final String base;
 
   Properties properties;
 
