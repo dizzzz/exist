@@ -21,8 +21,9 @@
  */
 package org.exist.webdav;
 
-import com.bradmcevoy.http.*;
-import com.bradmcevoy.http.Request.Method;
+import io.milton.http.*;
+import io.milton.http.Request.Method;
+import io.milton.resource.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.exist.security.Subject;
@@ -101,7 +102,7 @@ public class MiltonResource implements Resource {
     }
 
     /**
-     * Converts an org.exist.dom.persistent.LockToken into com.bradmcevoy.http.LockToken.
+     * Converts an org.exist.dom.persistent.LockToken into io.milton.http.LockToken.
      *
      * @param existLT Exist-db representation of a webdav token.
      * @return Milton representation of a webdav token.
@@ -159,7 +160,7 @@ public class MiltonResource implements Resource {
     }
 
     /**
-     *  Converts an org.exist.dom.persistent.LockToken into com.bradmcevoy.http.LockToken.
+     *  Converts an org.exist.dom.persistent.LockToken into io.milton.http.LockToken.
      * @param timeout Lock time out
      * @param lockInfo Lock info
      * @return The lock token

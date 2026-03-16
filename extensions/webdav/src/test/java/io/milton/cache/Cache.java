@@ -19,41 +19,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package com.ettrema.cache;
+package io.milton.cache;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Simple guess implementation of a class
  * that is missing from Milton but is required by Milton Client.
  */
-public class MemoryCache<K,V> implements Cache<K, V> {
-    private final String name;
-    private final int max;
-    private final int min;
+public interface Cache<K, V> {
 
-    private final Map<K, V> storage = new HashMap<>();
+    @Nullable V get(final K key);
 
-    public MemoryCache(final String name, final int max, final int min) {
-        this.name = name;
-        this.max = max;
-        this.min = min;
-    }
+    void put(final K key, final V value);
 
-    @Override
-    public @Nullable V get(final K key) {
-        return storage.get(key);
-    }
-
-    @Override
-    public void put(final K key, final V value) {
-        storage.put(key, value);
-    }
-
-    @Override
-    public @Nullable void remove(final K key) {
-        storage.remove(key);
-    }
+    @Nullable void remove(final K key);
 }

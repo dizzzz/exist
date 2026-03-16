@@ -21,9 +21,8 @@
  */
 package org.exist.webdav;
 
-
-import com.bradmcevoy.http.Resource;
-import com.bradmcevoy.http.ResourceFactory;
+import io.milton.http.ResourceFactory;
+import io.milton.resource.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.exist.EXistException;

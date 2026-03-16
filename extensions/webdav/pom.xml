@@ -62,19 +62,31 @@
         </dependency>
 
         <dependency>
-            <groupId>org.exist-db.thirdparty.com.ettrema</groupId>
+            <groupId>io.milton</groupId>
             <artifactId>milton-api</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>jdom</groupId>
-                    <artifactId>jdom</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-beanutils</groupId>
-                    <artifactId>commons-beanutils</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>4.1.0.2601</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.milton</groupId>
+            <artifactId>milton-server-ce</artifactId>
+            <version>4.1.0.2601</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.exist-db.thirdparty.com.ettrema</groupId>-->
+<!--            <artifactId>milton-api</artifactId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>jdom</groupId>-->
+<!--                    <artifactId>jdom</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>commons-beanutils</groupId>-->
+<!--                    <artifactId>commons-beanutils</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.jdom</groupId>
@@ -83,28 +95,28 @@
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.exist-db.thirdparty.com.ettrema</groupId>
-            <artifactId>milton-servlet</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>jcl-over-slf4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-webmvc</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.exist-db.thirdparty.com.ettrema</groupId>-->
+<!--            <artifactId>milton-servlet</artifactId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>log4j</groupId>-->
+<!--                    <artifactId>log4j</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                    <artifactId>slf4j-log4j12</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                    <artifactId>jcl-over-slf4j</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.springframework</groupId>-->
+<!--                    <artifactId>spring-webmvc</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -129,8 +141,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.exist-db.thirdparty.com.ettrema</groupId>
+            <groupId>io.milton</groupId>
             <artifactId>milton-client</artifactId>
+            <version>4.1.0.2601</version>
             <scope>test</scope>
         </dependency>
 

@@ -21,8 +21,8 @@
  */
 package org.exist.webdav;
 
-import com.bradmcevoy.http.MiltonServlet;
-import com.bradmcevoy.http.http11.DefaultHttp11ResponseHandler;
+import io.milton.http.http11.DefaultHttp11ResponseHandler;
+import io.milton.servlet.MiltonServlet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -72,18 +72,18 @@ public class MiltonWebDAVServlet extends MiltonServlet {
         // Initialize Milton
         super.init(config);
 
-        // Retrieve parameters, set to FALSE if not existent
-        String enableInitParameter = config.getInitParameter("enable.expect.continue");
-        if (enableInitParameter == null) {
-            enableInitParameter = "FALSE";
-        }
-
-        // Calculate effective value
-        boolean enableExpectContinue = "TRUE".equalsIgnoreCase(enableInitParameter);
-
-        // Pass value to Milton
-        httpManager.setEnableExpectContinue(enableExpectContinue);
-
-        LOG.debug("Set 'Enable Expect Continue' to {}", enableExpectContinue);
+//        // Retrieve parameters, set to FALSE if not existent
+//        String enableInitParameter = config.getInitParameter("enable.expect.continue");
+//        if (enableInitParameter == null) {
+//            enableInitParameter = "FALSE";
+//        }
+//
+//        // Calculate effective value
+//        boolean enableExpectContinue = "TRUE".equalsIgnoreCase(enableInitParameter);
+//
+//        // Pass value to Milton
+//        httpManager.setEnableExpectContinue(enableExpectContinue);
+//
+//        LOG.debug("Set 'Enable Expect Continue' to {}", enableExpectContinue);
     }
 }

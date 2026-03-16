@@ -22,11 +22,11 @@
 
 package org.exist.webdav;
 
-import com.bradmcevoy.http.exceptions.BadRequestException;
-import com.bradmcevoy.http.exceptions.ConflictException;
-import com.bradmcevoy.http.exceptions.NotAuthorizedException;
-import com.bradmcevoy.http.exceptions.NotFoundException;
-import com.ettrema.httpclient.*;
+import io.milton.http.exceptions.BadRequestException;
+import io.milton.http.exceptions.ConflictException;
+import io.milton.http.exceptions.NotAuthorizedException;
+import io.milton.http.exceptions.NotFoundException;
+import io.milton.httpclient.*;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.exist.TestUtils;
 import org.exist.test.ExistWebServer;

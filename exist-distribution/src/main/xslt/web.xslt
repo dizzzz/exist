@@ -67,7 +67,7 @@
       &lt;!-- </xsl:text>
             <init-param>
                 <param-name>filter_0</param-name>
-                <param-value>com.bradmcevoy.http.DebugFilter</param-value>
+                <param-value>io.milton.http.DebugFilter</param-value>
             </init-param>
             <xsl:text disable-output-escaping="yes">
       --&gt;

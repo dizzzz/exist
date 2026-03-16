@@ -21,8 +21,9 @@
  */
 package org.exist.webdav;
 
-import com.bradmcevoy.http.*;
-import com.bradmcevoy.http.exceptions.*;
+import io.milton.http.*;
+import io.milton.http.exceptions.*;
+import io.milton.resource.*;
 import org.exist.EXistException;
 import org.exist.security.PermissionDeniedException;
 import org.exist.security.Subject;
@@ -276,20 +277,19 @@ public class MiltonCollection extends MiltonResource
             LOG.debug("'{}' -- {}", resourceXmldbUri, lockInfo.toString());
         }
 
-        return refreshLock(UUIDGenerator.getUUIDversion4());
+        return refreshLock(UUIDGenerator.getUUIDversion4(), timeout);
     }
 
     @Override
-    public LockResult refreshLock(String token) throws NotAuthorizedException, PreConditionFailedException {
+    public LockResult refreshLock(String token, LockTimeout lockTimeout) throws NotAuthorizedException, PreConditionFailedException {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("'{}' token='{}'", resourceXmldbUri, token);
         }
 
         LockInfo lockInfo = new LockInfo(LockInfo.LockScope.NONE, LockInfo.LockType.READ, token, LockInfo.LockDepth.ZERO);
-        LockTimeout lockTime = new LockTimeout(Long.MAX_VALUE);
 
-        LockToken lockToken = new LockToken(token, lockInfo, lockTime);
+        LockToken lockToken = new LockToken(token, lockInfo, lockTimeout);
 
         return new LockResult(LockResult.FailureReason.PRECONDITION_FAILED, lockToken);
     }

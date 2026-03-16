@@ -21,10 +21,11 @@
  */
 package org.exist.webdav;
 
-import com.bradmcevoy.http.*;
-import com.bradmcevoy.http.exceptions.*;
-import com.bradmcevoy.http.webdav.DefaultUserAgentHelper;
-import com.bradmcevoy.http.webdav.UserAgentHelper;
+import io.milton.http.*;
+import io.milton.http.exceptions.*;
+import io.milton.http.webdav.DefaultUserAgentHelper;
+import io.milton.http.webdav.UserAgentHelper;
+import io.milton.resource.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.CountingOutputStream;
 import org.apache.commons.io.output.NullOutputStream;
@@ -263,7 +264,7 @@ public class MiltonDocument extends MiltonResource
         Long size = null;
 
         // MacOsX has a bad reputation
-        boolean isMacFinder = userAgentHelper.isMacFinder(HttpManager.request().getUserAgentHeader());
+        boolean isMacFinder = userAgentHelper.isMacFinder(HttpManager.request());
 
         if (existDocument.isXmlDocument()) {
             // XML document, exact size is not (directly) known)
@@ -368,13 +369,15 @@ public class MiltonDocument extends MiltonResource
         return lr;
     }
 
-    
+
     /* ================
      * LockableResource
      * ================ */
 
     @Override
-    public LockResult refreshLock(String token) throws NotAuthorizedException, PreConditionFailedException {
+    public LockResult refreshLock(String token, LockTimeout lockTimeout) throws NotAuthorizedException, PreConditionFailedException {
+
+        // todo: use LockTimeout lockTimeout
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Refresh: {} token={}", resourceXmldbUri, token);
