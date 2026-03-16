@@ -39,7 +39,7 @@ class AlwaysBasicPreAuth implements HttpRequestInterceptor {
 
     @Override
     public void process(final HttpRequest request, final HttpContext context) {
-        String token = Base64.getEncoder().encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
+        final String token = Base64.getEncoder().encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
         request.addHeader("Authorization", "Basic " + token);
     }
 }

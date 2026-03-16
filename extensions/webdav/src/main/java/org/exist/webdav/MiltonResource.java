@@ -66,7 +66,7 @@ public class MiltonResource implements Resource {
         if (datatypeFactory == null) {
             try {
                 datatypeFactory = DatatypeFactory.newInstance();
-            } catch (DatatypeConfigurationException ex) {
+            } catch (final DatatypeConfigurationException ex) {
                 LOG.error(ex);
             }
         }
@@ -91,13 +91,13 @@ public class MiltonResource implements Resource {
      * @param date Representation of data
      * @return ISO8601 like formatted representation of date.s
      */
-    protected String getXmlDateTime(Long date) {
+    protected String getXmlDateTime(final Long date) {
         // Convert to Calendar
-        GregorianCalendar gc = new GregorianCalendar();
+        final GregorianCalendar gc = new GregorianCalendar();
         gc.setTime(new Date(date));
 
         // COnvert to XML dateTimes
-        XMLGregorianCalendar xgc = datatypeFactory.newXMLGregorianCalendar(gc);
+        final XMLGregorianCalendar xgc = datatypeFactory.newXMLGregorianCalendar(gc);
         return xgc.toXMLFormat();
     }
 
@@ -107,7 +107,7 @@ public class MiltonResource implements Resource {
      * @param existLT Exist-db representation of a webdav token.
      * @return Milton representation of a webdav token.
      */
-    protected LockToken convertToken(org.exist.dom.persistent.LockToken existLT) {
+    protected LockToken convertToken(final org.exist.dom.persistent.LockToken existLT) {
 
         // LockInfo : construct scope
         final LockInfo.LockScope scope = switch (existLT.getScope()) {
@@ -135,7 +135,7 @@ public class MiltonResource implements Resource {
 
 
         // LockInfo
-        LockInfo li = new LockInfo(scope, type, owner, depth);
+        final LockInfo li = new LockInfo(scope, type, owner, depth);
 
         // Lock Timeout
         Long timeout = existLT.getTimeOut();
@@ -149,10 +149,10 @@ public class MiltonResource implements Resource {
             timeout = Long.MAX_VALUE;
         }
 
-        LockTimeout lt = new LockTimeout(timeout);
+        final LockTimeout lt = new LockTimeout(timeout);
 
         // Token Id
-        String id = existLT.getOpaqueLockToken();
+        final String id = existLT.getOpaqueLockToken();
 
         // Return values in Milton object
         return new LockToken(id, li, lt);
@@ -217,16 +217,16 @@ public class MiltonResource implements Resource {
      * @param uri URI pf path
      * @return decoded path
      */
-    protected XmldbURI decodePath(XmldbURI uri) {
+    protected XmldbURI decodePath(final XmldbURI uri) {
 
         XmldbURI retval = null;
 
         try {
-            String path = new URI(uri.toString()).getPath();
+            final String path = new URI(uri.toString()).getPath();
 
-            retval = XmldbURI.xmldbUriFor("" + path, false);
+            retval = XmldbURI.xmldbUriFor(path, false);
 
-        } catch (URISyntaxException ex) {
+        } catch (final URISyntaxException ex) {
             // oops
             LOG.error(ex.getMessage());
 
@@ -240,14 +240,14 @@ public class MiltonResource implements Resource {
      * @param uri URI of path
      * @return encoded path
      */
-    protected String decodePath(String uri) {
+    protected String decodePath(final String uri) {
 
         String path = null;
 
         try {
             path = new URI(uri).getPath();
 
-        } catch (URISyntaxException ex) {
+        } catch (final URISyntaxException ex) {
             // oops
             LOG.error(ex.getMessage());
         }
@@ -269,7 +269,7 @@ public class MiltonResource implements Resource {
     }
 
     @Override
-    public Object authenticate(String username, String password) {
+    public Object authenticate(final String username, final String password) {
 
         if (LOG.isDebugEnabled())
             LOG.debug("Authenticating user {} for {}", username, resourceXmldbUri);
@@ -297,7 +297,7 @@ public class MiltonResource implements Resource {
         }
 
         // Guest is not allowed to access.
-        Subject guest = brokerPool.getSecurityManager().getGuestSubject();
+        final Subject guest = brokerPool.getSecurityManager().getGuestSubject();
         if (guest.equals(subject)) {
             LOG.error("The user {} is prohibited from logging in through WebDAV.", guest.getName());
             return null;
@@ -314,7 +314,7 @@ public class MiltonResource implements Resource {
     }
 
     @Override
-    public boolean authorise(Request request, Method method, Auth auth) {
+    public boolean authorise(final Request request, final Method method, final Auth auth) {
 
         LOG.info("{} {} (write={})", method.toString(), resourceXmldbUri, method.isWrite);
 
@@ -328,13 +328,13 @@ public class MiltonResource implements Resource {
         }
 
         // Get effective username
-        String userName = auth.getUser();
+        final String userName = auth.getUser();
 
         // Get authentication object
-        Object tag = auth.getTag();
+        final Object tag = auth.getTag();
 
         // Get URI. no idea why value is null.
-        String authURI = auth.getUri();
+        final String authURI = auth.getUri();
 
         // If object does not exist, there was no successfull authentication
         if (tag == null) {
@@ -342,7 +342,7 @@ public class MiltonResource implements Resource {
                 LOG.debug("No tag, user {} not authenticated", userName);
             return false;
 
-        } else if (tag instanceof String value) {
+        } else if (tag instanceof final String value) {
             if (AUTHENTICATED.equals(value)) {
                 // The correct TAG is returned!
 
@@ -377,7 +377,7 @@ public class MiltonResource implements Resource {
             // not sure why the null value can be there
         }
 
-        String action = method.isWrite ? "write" : "read";
+        final String action = method.isWrite ? "write" : "read";
         if (LOG.isDebugEnabled())
             LOG.debug("User {} is authorized to {} resource {}", userName, action, resourceXmldbUri.toString());
 
@@ -394,7 +394,7 @@ public class MiltonResource implements Resource {
 
         Date modifiedDate = null;
 
-        Long time = existResource.getLastModified();
+        final Long time = existResource.getLastModified();
         if (time != null) {
             modifiedDate = new Date(time);
         }
@@ -406,7 +406,7 @@ public class MiltonResource implements Resource {
     }
 
     @Override
-    public String checkRedirect(Request request) {
+    public String checkRedirect(final Request request) {
         return null;
     }
 }

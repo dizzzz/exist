@@ -44,24 +44,24 @@ public class MiltonWebDAVServlet extends MiltonServlet {
     public static String POM_PROP = "/META-INF/maven/com.ettrema/milton-api/pom.properties";
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(final ServletConfig config) throws ServletException {
 
         LOG.info("Initializing webdav servlet");
 
         // Show used version
-        Properties props = new Properties();
+        final Properties props = new Properties();
         try {
-            InputStream is = DefaultHttp11ResponseHandler.class.getResourceAsStream(POM_PROP);
+            final InputStream is = DefaultHttp11ResponseHandler.class.getResourceAsStream(POM_PROP);
             if (is == null) {
                 LOG.error("Could not read the file milton.properties");
             } else {
                 props.load(is);
             }
 
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             LOG.warn("Failed to load milton properties file", ex);
         }
-        String miltonVersion = props.getProperty("version");
+        final String miltonVersion = props.getProperty("version");
 
         if (miltonVersion == null) {
             LOG.error("Unable to determine Milton version");
