@@ -69,7 +69,7 @@
 
         <dependency>
             <groupId>io.milton</groupId>
-            <artifactId>milton-server-ce</artifactId>
+            <artifactId>milton-server-ent</artifactId>
             <version>4.1.0.2601</version>
         </dependency>
 
@@ -212,6 +212,7 @@
                             <ignoredUnusedDeclaredDependencies>
                                 <ignoredUnusedDeclaredDependency>org.jdom:jdom:jar</ignoredUnusedDeclaredDependency>
                                 <ignoredUnusedDeclaredDependency>commons-beanutils:commons-beanutils</ignoredUnusedDeclaredDependency>
+                                <ignoredUnusedDeclaredDependency>io.milton:milton-server-ent:jar:4.1.0.2601</ignoredUnusedDeclaredDependency>
 
                                 <!-- needed for running tests that depend on eXist-db Jetty server -->
                                 <ignoredUnusedDeclaredDependency>${project.groupId}:exist-jetty-config:jar:${project.version}</ignoredUnusedDeclaredDependency>
@@ -219,6 +220,9 @@
                                 <ignoredUnusedDeclaredDependency>org.eclipse.jetty:jetty-jmx:jar:${jetty.version}</ignoredUnusedDeclaredDependency>
 
                             </ignoredUnusedDeclaredDependencies>
+                            <ignoredUsedUndeclaredDependencies>
+                                <ignoredUsedUndeclaredDependency>io.milton:milton-server-ce:jar:4.1.0.2601</ignoredUsedUndeclaredDependency>
+                            </ignoredUsedUndeclaredDependencies>
                         </configuration>
                     </execution>
                 </executions>

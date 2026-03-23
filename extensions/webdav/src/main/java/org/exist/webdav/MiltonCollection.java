@@ -244,7 +244,7 @@ public class MiltonCollection extends MiltonResource
             resource = new MiltonDocument(configuration, host, resourceURI, brokerPool, subject);
 
         } catch (final PermissionDeniedException | CollectionDoesNotExistException | IOException e) {
-            LOG.debug(e.getMessage());
+            LOG.debug(e.getMessage(), e);
             throw new ConflictException(this, "Create New '" + getXmldbUri().append(newName) + "' failed: " + e.getMessage());
         }
         return resource;
