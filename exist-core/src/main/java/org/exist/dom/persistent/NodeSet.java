@@ -298,6 +298,20 @@ public interface NodeSet extends Sequence, NodeList, Iterable<NodeProxy> {
     boolean directMatchAttribute(DBBroker broker, org.exist.xquery.NodeTest test, int contextId);
 
     /**
+     * Optimized method to select child elements by QName. Use this if the context has just one or
+     * two nodes. Children will be directly looked up in the persistent DOM store via streaming,
+     * without deserializing the full subtree.
+     *
+     * @param broker    the eXist-db DBBroker
+     * @param qname     the QName to match against direct children
+     * @param contextId used to track context nodes when evaluating predicate expressions.
+     *                  If contextId != {@link org.exist.xquery.Expression#NO_CONTEXT_ID}, the current
+     *                  context will be added to each result of the selection.
+     * @return selected child elements
+     */
+    NodeSet directSelectChild(DBBroker broker, org.exist.dom.QName qname, int contextId);
+
+    /**
      * If all nodes in this set have an index, returns the common
      * supertype used to build the index, e.g. xs:integer or xs:string.
      * If the nodes have different index types or no node has been indexed,

@@ -296,6 +296,11 @@ public abstract class AbstractNodeSet extends AbstractSequence implements NodeSe
     }
 
     @Override
+    public NodeSet directSelectChild(final DBBroker broker, final org.exist.dom.QName qname, final int contextId) {
+        return NodeSetHelper.directSelectChildren(broker, this, qname, contextId);
+    }
+
+    @Override
     public NodeProxy parentWithChild(final DocumentImpl doc, NodeId nodeId, final boolean directParent, final boolean includeSelf) {
         NodeProxy temp = get(doc, nodeId);
         if(includeSelf && temp != null) {

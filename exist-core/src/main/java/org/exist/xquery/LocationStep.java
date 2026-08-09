@@ -27,6 +27,7 @@ import org.exist.dom.memtree.InMemoryNodeSet;
 import org.exist.dom.memtree.NodeImpl;
 import org.exist.numbering.NodeId;
 import org.exist.stax.*;
+import org.exist.storage.DBBroker;
 import org.exist.storage.ElementValue;
 import org.exist.storage.UpdateListener;
 import org.exist.xquery.value.*;
@@ -678,11 +679,20 @@ public class LocationStep extends Step {
         // LOG.debug("parentDepth for " + test.getName() + ": " + parentDepth);
 
         if (useDirectChildSelect) {
-            final NewArrayNodeSet result = new NewArrayNodeSet();
+            // Pass the broker so directSelectChild can stream the persistent DOM
+            // without deserializing the full subtree via getNode()/getChildNodes().
+            final DBBroker broker = context.getBroker();
+            NewArrayNodeSet result = null;
             for (final NodeProxy p : contextSet) {
-                result.addAll(p.directSelectChild(test.getName(), contextId));
+                final NodeSet children = p.directSelectChild(broker, test.getName(), contextId);
+                if (!children.isEmpty()) {
+                    if (result == null) {
+                        result = new NewArrayNodeSet();
+                    }
+                    result.addAll(children);
+                }
             }
-            return result;
+            return result == null ? NodeSet.EMPTY_SET : result;
         } else if (hasPreloadedData()) {
             final DocumentSet docs = getDocumentSet(contextSet);
             synchronized (context) {
