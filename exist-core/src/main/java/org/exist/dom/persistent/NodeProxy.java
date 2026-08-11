@@ -40,7 +40,6 @@ import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
@@ -1334,34 +1333,55 @@ public class NodeProxy implements NodeSet, NodeValue, NodeHandle, DocumentSet, C
         }
     }
 
-    public NodeSet directSelectChild(final QName qname, final int contextId) {
-        if(nodeType != UNKNOWN_NODE_TYPE && nodeType != Node.ELEMENT_NODE) {
+    public NodeSet directSelectChild(final DBBroker broker, final QName qname, final int contextId) {
+        if (nodeType != UNKNOWN_NODE_TYPE && nodeType != Node.ELEMENT_NODE) {
             return NodeSet.EMPTY_SET;
         }
-        final NodeImpl node = (NodeImpl) getNode();
-        if(node.getNodeType() != Node.ELEMENT_NODE) {
-            return NodeSet.EMPTY_SET;
-        }
-        final NodeList children = node.getChildNodes();
-        if(children.getLength() == 0) {
-            return NodeSet.EMPTY_SET;
-        }
-        final NewArrayNodeSet result = new NewArrayNodeSet();
-        IStoredNode<?> child;
-        for(int i = 0; i < children.getLength(); i++) {
-            child = (IStoredNode<?>) children.item(i);
-            if(child.getQName().equals(qname)) {
-                final NodeProxy p = new NodeProxy(expression, doc, child.getNodeId(), Node.ELEMENT_NODE, child.getInternalAddress());
-                if(Expression.NO_CONTEXT_ID != contextId) {
-                    p.addContextNode(contextId, this);
-                } else {
-                    p.copyContext(this);
-                }
-                p.addMatches(this);
-                result.add(p);
+        try {
+            NewArrayNodeSet result = null;
+            final IEmbeddedXMLStreamReader reader = broker.getXMLStreamReader(this, false);
+
+            // Advance to the START_ELEMENT of the current node
+            int status = reader.next();
+            if (status != XMLStreamReader.START_ELEMENT) {
+                return NodeSet.EMPTY_SET;
             }
+
+            // depth == 0 means we are at the direct-child level.
+            // Stop as soon as we reach the END_ELEMENT that closes the current node.
+            int depth = 0;
+            while ((status = reader.next()) != XMLStreamReader.END_DOCUMENT) {
+                if (status == XMLStreamReader.START_ELEMENT) {
+                    if (depth == 0) {
+                        // Direct child: test the QName without deserializing the subtree
+                        final IStoredNode<?> child = reader.getNode();
+                        if (child.getQName().equals(qname)) {
+                            final NodeProxy p = new NodeProxy(expression, child);
+                            if (Expression.NO_CONTEXT_ID != contextId) {
+                                p.addContextNode(contextId, this);
+                            } else {
+                                p.copyContext(this);
+                            }
+                            p.addMatches(this);
+                            if (result == null) {
+                                result = new NewArrayNodeSet();
+                            }
+                            result.add(p);
+                        }
+                    }
+                    depth++;
+                } else if (status == XMLStreamReader.END_ELEMENT) {
+                    if (depth == 0) {
+                        // END_ELEMENT of the parent node: exit
+                        break;
+                    }
+                    depth--;
+                }
+            }
+            return result == null ? NodeSet.EMPTY_SET : result;
+        } catch (final IOException | XMLStreamException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
-        return result;
     }
 
     @Override
@@ -1585,25 +1605,38 @@ public class NodeProxy implements NodeSet, NodeValue, NodeHandle, DocumentSet, C
         }
     }
 
-    public boolean directMatchChild(final QName qname, final int contextId) {
-        if(nodeType != UNKNOWN_NODE_TYPE && nodeType != Node.ELEMENT_NODE) {
-            return false;
-        }
-        final NodeImpl node = (NodeImpl) getNode();
-        if(node.getNodeType() != Node.ELEMENT_NODE) {
-            return false;
-        }
-        final NodeList children = node.getChildNodes();
-        if(children.getLength() == 0) {
-            return false;
-        }
-        IStoredNode<?> child;
-        for(int i = 0; i < children.getLength(); i++) {
-            child = (IStoredNode<?>) children.item(i);
-            if(child.getQName().equals(qname)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    // TODO: DEAD CODE — no call site found anywhere in the project. To be removed in a follow-up
+    //       commit once confirmed that no external branch references this method.
+    //
+    // public boolean directMatchChild(final DBBroker broker, final QName qname, final int contextId) {
+    //     if (nodeType != UNKNOWN_NODE_TYPE && nodeType != Node.ELEMENT_NODE) {
+    //         return false;
+    //     }
+    //     try {
+    //         final IEmbeddedXMLStreamReader reader = broker.getXMLStreamReader(this, false);
+    //
+    //         int status = reader.next();
+    //         if (status != XMLStreamReader.START_ELEMENT) {
+    //             return false;
+    //         }
+    //
+    //         int depth = 0;
+    //         while ((status = reader.next()) != XMLStreamReader.END_DOCUMENT) {
+    //             if (status == XMLStreamReader.START_ELEMENT) {
+    //                 if (depth == 0 && reader.getNode().getQName().equals(qname)) {
+    //                     return true;
+    //                 }
+    //                 depth++;
+    //             } else if (status == XMLStreamReader.END_ELEMENT) {
+    //                 if (depth == 0) {
+    //                     break;
+    //                 }
+    //                 depth--;
+    //             }
+    //         }
+    //         return false;
+    //     } catch (final IOException | XMLStreamException e) {
+    //         throw new RuntimeException(e.getMessage(), e);
+    //     }
+    // }
 }
