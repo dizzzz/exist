@@ -21,6 +21,7 @@
  */
 package org.exist.dom.persistent;
 
+import org.exist.dom.QName;
 import org.exist.numbering.NodeId;
 import org.exist.storage.DBBroker;
 import org.exist.xquery.Constants;
@@ -637,6 +638,24 @@ public final class NodeSetHelper {
             }
         }
         return result;
+    }
+
+    public static NodeSet directSelectChildren(final DBBroker broker,
+            final NodeSet candidates, final org.exist.dom.QName qname, final int contextId) {
+        if (candidates.isEmpty()) {
+            return NodeSet.EMPTY_SET;
+        }
+        NewArrayNodeSet result = null;
+        for (final NodeProxy candidate : candidates) {
+            final NodeSet children = candidate.directSelectChild(broker, qname, contextId);
+            if (!children.isEmpty()) {
+                if (result == null) {
+                    result = new NewArrayNodeSet();
+                }
+                result.addAll(children);
+            }
+        }
+        return result == null ? NodeSet.EMPTY_SET : result;
     }
 
     public static NodeSet directSelectAttributes(final DBBroker broker,
